@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+    <h1>Co2 udledt i Kg ved flyrejse</h1>
+    <p>Hvor mange timer tager flyturen?</p>
+    <input typen="text" id="timer">
+    <button>Udregn Co2 og kig i consollen</button>
+
+    <script>
+        document.querySelector("button").addEventListener("click", button_clicked);
+
+        function button_clicked() {
+            let co2 = 109;
+            let timer = document.querySelector("#timer").value;
+            console.log(`Ved ${timer} timers flyrejse har du udledt ${timer*co2} kg CO2!`)
+        }
+    </script>
+</body></html>
