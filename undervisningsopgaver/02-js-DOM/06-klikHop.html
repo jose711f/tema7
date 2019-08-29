@@ -34,13 +34,44 @@
     <script>
         const firkantURL = `http://mabe-kea.dk/E19/pics/frog.png`;
         const cirkelURL = `http://mabe-kea.dk/E19/pics/pig.png`;
+        const firkant = document.querySelector(".firkant");
+        const cirkel = document.querySelector(".cirkel");
 
         document.addEventListener("DOMContentLoaded", start);
 
         function start() {
             console.log("start");
-            document.querySelector(".firkant").innerHTML = `<img src= ${firkantURL} alt="grøn frø">`;
-            document.querySelector(".cirkel").innerHTML = `<img src= ${cirkelURL} alt="lyserød gris">`;
+
+            //            document.querySelector(".firkant").innerHTML = `<img src= ${firkantURL} alt="grøn frø">`;
+            //            document.querySelector(".cirkel").innerHTML = `<img src= ${cirkelURL} alt="lyserød gris">`;
+
+            //            const firkant = document.querySelector(".firkant");
+            const imgF = document.createElement("img");
+            imgF.src = firkantURL;
+            imgF.alt = "grøn frø";
+            firkant.appendChild(imgF);
+
+            //            const cirkel = document.querySelector(".cirkel");
+            const imgC = document.createElement("img");
+            imgC.src = cirkelURL;
+            imgC.alt = "lyserød gris";
+            cirkel.appendChild(imgC);
+
+            firkant.addEventListener("click", flyt);
+            cirkel.addEventListener("click", stop);
+        }
+
+        function flyt() {
+            const FChild = firkant.querySelector("img");
+            const CChild = cirkel.querySelector("img");
+            cirkel.textContent = "";
+            firkant.textContent = "";
+            firkant.appendChild(CChild);
+            cirkel.appendChild(FChild);
+        }
+
+        function stop() {
+            firkant.removeEventListener("click", flyt);
         }
 
     </script>
