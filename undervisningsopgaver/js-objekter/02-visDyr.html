@@ -18,12 +18,6 @@
     </article>
 
     <script>
-        document.addEventListener("DOMContentLoaded", start);
-
-        function start() {
-            const
-        }
-
         const dyr = {
             navn: "Gris",
             type: "pattedyr",
@@ -31,14 +25,12 @@
             levested: "Svinefarme"
         }
 
-        const h2 = document.querySelector("h2");
-        h2.textContent = dyr.navn;
-        h2.textContent += " Hold: " + dyr.type;
-        const img = document.querySelector("img");
-        img.src = dyr.billede;
-        img.alt = "Billede af gris";
+        const article = document.querySelector("article");
+        document.addEventListener("DOMContentLoaded", start);
 
-        console.log(dyr.navn, dyr.type, dyr.levested);
+        function start() {
+            article.textContent = dyr.navn, dyr.type, dyr.levested;
+        }
 
     </script>
 
