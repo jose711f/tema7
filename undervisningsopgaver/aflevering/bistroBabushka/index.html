@@ -75,7 +75,7 @@
 
         footer {
             display: flex;
-            background-color: #b5a77f;
+            background-color: #d4bdaa;
             flex-direction: row;
             justify-content: space-around;
             width: 100%;
@@ -104,6 +104,7 @@
             font-family: 'Libre Franklin', sans-serif;
             font-size: 1em;
         }
+
     </style>
 </head>
 
@@ -169,15 +170,17 @@
                 const klon = temp.cloneNode(true);
                 // console.log(klon);
 
-                klon.querySelector("img").src = ret.gsx$billede.$t;
-                klon.querySelector("h2").textContent = ret.gsx$navn.$t;
+                const billede = ret.gsx$billede.$t;
+                klon.querySelector("img").src = "/imgs/small" + ret.gsx$billede.$t + "-sm.jpg";
                 klon.querySelector("img").alt = "Billede af " + ret.gsx$navn.$t;
+                klon.querySelector("h2").textContent = ret.gsx$navn.$t;
                 klon.querySelector(".kort").textContent = `Beskrivelse: ${ret.gsx$kort.$t}`;
                 klon.querySelector(".pris").textContent = `Pris: ${ret.gsx$pris.$t},-`;
 
                 dest.appendChild(klon);
             })
         }
+
     </script>
 
     <footer>
@@ -192,4 +195,6 @@
             <p>Lørdag 12:00 - 23:00 </p>
         </div>
     </footer>
-</body></html>
+</body>
+
+</html>

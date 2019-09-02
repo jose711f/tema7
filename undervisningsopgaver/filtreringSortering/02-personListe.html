@@ -60,6 +60,7 @@
 
     <script>
         let allePersoner = [];
+        let filter = "k";
 
         document.addEventListener("DOMContentLoaded", start);
 
@@ -83,15 +84,17 @@
             const dest = document.querySelector("#liste");
 
             allePersoner.feed.entry.forEach((person) => {
-                const klon = temp.cloneNode(true);
-                // console.log(klon);
+                if (person.gsx$køn.$t == filter) {
+                    const klon = temp.cloneNode(true);
+                    // console.log(klon);
 
-                klon.querySelector("h2").textContent = person.gsx$navn.$t;
-                klon.querySelector("img").src = person.gsx$billede.$t;
-                klon.querySelector("img").alt = "Billede af " + person.gsx$navn.$t;
-                klon.querySelector(".github").href = `http://github.com/${person.gsx$github.$t}`;
-                klon.querySelector(".github").textContent = `http://github.com/${person.gsx$github.$t}`;
-                dest.appendChild(klon);
+                    klon.querySelector("h2").textContent = person.gsx$navn.$t;
+                    klon.querySelector("img").src = person.gsx$billede.$t;
+                    klon.querySelector("img").alt = "Billede af " + person.gsx$navn.$t;
+                    klon.querySelector(".github").href = `http://github.com/${person.gsx$github.$t}`;
+                    klon.querySelector(".github").textContent = `http://github.com/${person.gsx$github.$t}`;
+                    dest.appendChild(klon);
+                }
             })
         }
 
