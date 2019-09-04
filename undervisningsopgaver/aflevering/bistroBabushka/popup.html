@@ -12,7 +12,7 @@
         }
 
         #header {
-            position: fixed;
+            position: absolute;
             display: flex;
             justify-content: space-between;
             width: 100vw;
@@ -74,7 +74,6 @@
         article {
             background-color: rgba(212, 189, 170, 0.33);
             padding: 10px;
-            justify-items: space-between;
             cursor: pointer;
         }
 
@@ -121,10 +120,45 @@
             font-size: 1em;
             margin: 0;
         }
+
+        #popup {
+            position: fixed;
+            text-align: center;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: hsla(44, 22%, 31%, 0.53);
+        }
+
+        #popup img {
+            width: 32vw;
+            ;
+        }
+
+        #popup .ret {
+            width: 60vw;
+            min-height: 50vh;
+            margin: 4rem auto;
+            padding: 4rem;
+            background: white;
+        }
+
+        #popup .luk {
+            position: fixed;
+            font-family: 'Libre Franklin', sans-serif;
+            top: 0;
+            right: 0;
+            font-size: 4rem;
+            cursor: pointer;
+            background: hsla(44, 22%, 31%, 0.53);
+        }
+
     </style>
 </head>
 
 <body>
+
     <section id="header">
         <a href="index.html"><img src="logo.svg" alt="logo"></a>
         <nav>
@@ -140,12 +174,6 @@
         </nav>
     </section>
 
-    <!--
-    <section id="splash">
-        <img src="imgs/russisktapas.png" alt="splash-billede">
-    </section>
--->
-
     <h1>Velkommen til Bistro Babushka</h1>
     <h4>Bistro Babushka er en hyggelig familierestaurant i hjertet af København. Ring for at reservere bord.</h4>
     <h4>Vi brænder for det russiske køkken og tilbyder traditionelle russiske retter og drikkevarer.</h4>
@@ -156,13 +184,22 @@
     </section>
 
     <template>
-        <article class="navn">
-            <h2> </h2>
+        <article class="ret">
+            <h2 class="navn"></h2>
             <img src="" alt="">
             <p class="kort"> </p>
             <p class="pris"> </p>
         </article>
     </template>
+
+    <section id="popup">
+        <article class="ret">
+            <button class="luk">X</button>
+            <h2></h2>
+            <img src="" alt="">
+            <p class="lang"> </p>
+        </article>
+    </section>
 
     <script>
         let alleRetter = [];
@@ -173,6 +210,7 @@
         function start() {
             const filterKnapper = document.querySelectorAll("button");
             filterKnapper.forEach(knap => knap.addEventListener("click", filtrerRetter));
+            document.querySelector("#popup").style.display = "none";
             hentJson();
         }
 
@@ -180,7 +218,7 @@
             document.querySelector(".valgt").classList.remove("valgt");
             this.classList.add("valgt");
             filter = this.dataset.kategori;
-            console.log(filter);
+            //            console.log(filter);
             visJson();
         }
 
@@ -214,9 +252,29 @@
                     klon.querySelector(".pris").textContent = `Pris: ${ret.gsx$pris.$t},-`;
 
                     dest.appendChild(klon);
+                    dest.lastElementChild.addEventListener("click", () => {
+                        visSingle(ret);
+                    });
                 }
             })
         }
+
+        function visSingle(ret) {
+            document.querySelector("#popup").style.display = "block";
+            document.querySelector("#popup .luk").addEventListener("click", lukSingle);
+
+            document.querySelector("#popup h2").textContent = ret.gsx$navn.$t;
+            document.querySelector("#popup img").src = "/imgs/large/" + ret.gsx$billede.$t + ".jpg";
+            document.querySelector("#popup img").alt = ret.gsx$navn.$t;
+            document.querySelector("#popup .lang").textContent = ret.gsx$lang.$t;
+        }
+
+        function lukSingle() {
+            document.querySelector("#popup").style.display = "none";
+
+            start();
+        }
+
     </script>
 
     <footer>
@@ -231,4 +289,6 @@
             <p>Lørdag 12:00 - 23:00 </p>
         </div>
     </footer>
-</body></html>
+</body>
+
+</html>
