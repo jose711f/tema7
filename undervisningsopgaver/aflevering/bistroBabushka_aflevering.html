@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bistro Babushka</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Libre+Franklin&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+        }
+
+        #header {
+            position: absolute;
+            display: flex;
+            justify-content: space-between;
+            width: 100vw;
+            height: 110px;
+            background-color: #d4bdaa;
+            border-bottom: 6px solid #9f8163;
+            top: 0;
+        }
+
+        #header img {
+            position: absolute;
+            top: 0px;
+            width: 250px;
+            margin: 5px;
+        }
+
+        #menu li {
+            display: inline;
+            position: relative;
+            top: 65px;
+            right: 5px;
+        }
+
+        button {
+            text-decoration: none;
+            font-family: 'Libre Franklin', sans-serif;
+            font-size: 0.9em;
+            border: none;
+            background-color: #d4bdaa;
+            cursor: pointer;
+        }
+
+        button:hover {
+            color: #625347;
+        }
+
+        .valgt {
+            color: #625347;
+        }
+
+
+        /*
+        #splash img {
+            display: flex;
+            width: 100%;
+            margin: 50px 0 0 0;
+        }
+*/
+
+        #liste {
+            width: 70vw;
+            margin: 1vw auto;
+            padding: 2vw;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-gap: 2rem;
+        }
+
+        article {
+            background-color: rgba(212, 189, 170, 0.33);
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        article img {
+            width: 100%;
+            /*            height: 30vh;*/
+        }
+
+        footer {
+            display: flex;
+            background-color: #d4bdaa;
+            flex-direction: row;
+            justify-content: space-around;
+            width: 100%;
+            padding: 0px;
+            height: 110px;
+        }
+
+        footer p {
+            font-size: 1em;
+        }
+
+        h2,
+        p,
+        img {
+            font-family: 'Libre Franklin', sans-serif;
+        }
+
+        h1 {
+            font-family: 'Libre Franklin', sans-serif;
+            text-align: center;
+            margin: 12vw 0 2vw;
+            font-size: 2.5em;
+        }
+
+        h3 {
+            font-family: 'Libre Franklin', sans-serif;
+            font-size: 1em;
+        }
+
+        h4 {
+            font-family: 'Libre Franklin', sans-serif;
+            text-align: center;
+            font-size: 1em;
+            margin: 0;
+        }
+
+        #popup {
+            position: fixed;
+            text-align: center;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: hsla(44, 22%, 31%, 0.53);
+        }
+
+        #popup img {
+            width: 32vw;
+            ;
+        }
+
+        #popup .ret {
+            width: 60vw;
+            min-height: 50vh;
+            margin: 4rem auto;
+            padding: 4rem;
+            background: white;
+        }
+
+        #popup .luk {
+            position: fixed;
+            font-family: 'Libre Franklin', sans-serif;
+            top: 0;
+            right: 0;
+            font-size: 4rem;
+            cursor: pointer;
+            background: hsla(44, 22%, 31%, 0.53);
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <section id="header">
+        <a href="index.html"><img src="logo.svg" alt="logo"></a>
+        <nav>
+            <div id="menu">
+                <ul id="menuliste">
+                    <li><button class="filterknap valgt" data-kategori="alle">Alle</button></li>
+                    <li><button class="filterknap" data-kategori="forretter">Forretter</button></li>
+                    <li><button class="filterknap" data-kategori="hovedretter">Hovedretter</button></li>
+                    <li><button class="filterknap" data-kategori="desserter">Desserter</button></li>
+                    <li><button class="filterknap" data-kategori="drikkevarer">Drikkevarer</button></li>
+                </ul>
+            </div>
+        </nav>
+    </section>
+
+    <h1>Velkommen til Bistro Babushka</h1>
+    <h4>Bistro Babushka er en hyggelig familierestaurant i hjertet af København. Ring for at reservere bord.</h4>
+    <h4>Vi brænder for det russiske køkken og tilbyder traditionelle russiske retter og drikkevarer.</h4>
+    <h4>Nedenfor kan i se vores menu. Tryk for at læse mere om den enkelte ret.</h4>
+    <h4>Vi glæder os til at byde dig velkommen indenfor.</h4>
+
+    <section id="liste">
+    </section>
+
+    <template>
+        <article class="ret">
+            <h2 class="navn"></h2>
+            <img src="" alt="">
+            <p class="kort"> </p>
+            <p class="pris"> </p>
+        </article>
+    </template>
+
+    <section id="popup">
+        <article class="ret">
+            <button class="luk">X</button>
+            <h2></h2>
+            <img src="" alt="">
+            <p class="lang"> </p>
+        </article>
+    </section>
+
+    <script>
+        let alleRetter = [];
+        let filter = "alle";
+
+        document.addEventListener("DOMContentLoaded", start);
+
+        function start() {
+            const filterKnapper = document.querySelectorAll("button");
+            filterKnapper.forEach(knap => knap.addEventListener("click", filtrerRetter));
+            document.querySelector("#popup").style.display = "none";
+            hentJson();
+        }
+
+        function filtrerRetter() {
+            document.querySelector(".valgt").classList.remove("valgt");
+            this.classList.add("valgt");
+            filter = this.dataset.kategori;
+            //            console.log(filter);
+            visJson();
+        }
+
+        async function hentJson() {
+            const jsonUrl = "https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json";
+
+            const myJson = await fetch(jsonUrl);
+            console.log(jsonUrl);
+            alleRetter = await myJson.json();
+            console.log(alleRetter);
+
+            visJson();
+        }
+
+        function visJson() {
+            const temp = document.querySelector("template").content;
+            const dest = document.querySelector("#liste");
+
+            dest.textContent = "";
+
+            alleRetter.feed.entry.forEach((ret) => {
+                if (ret.gsx$kategori.$t == filter || filter == "alle") {
+                    const klon = temp.cloneNode(true);
+                    // console.log(klon);
+
+                    const billede = ret.gsx$billede.$t;
+                    klon.querySelector("img").src = "/imgs/small/" + ret.gsx$billede.$t + "-sm.jpg";
+                    klon.querySelector("img").alt = "Billede af " + ret.gsx$navn.$t;
+                    klon.querySelector("h2").textContent = ret.gsx$navn.$t;
+                    klon.querySelector(".kort").textContent = `Beskrivelse: ${ret.gsx$kort.$t}`;
+                    klon.querySelector(".pris").textContent = `Pris: ${ret.gsx$pris.$t},-`;
+
+                    dest.appendChild(klon);
+                    dest.lastElementChild.addEventListener("click", () => {
+                        visSingle(ret);
+                    });
+                }
+            })
+        }
+
+        function visSingle(ret) {
+            document.querySelector("#popup").style.display = "block";
+            document.querySelector("#popup .luk").addEventListener("click", lukSingle);
+
+            document.querySelector("#popup h2").textContent = ret.gsx$navn.$t;
+            document.querySelector("#popup img").src = "/imgs/large/" + ret.gsx$billede.$t + ".jpg";
+            document.querySelector("#popup img").alt = ret.gsx$navn.$t;
+            document.querySelector("#popup .lang").textContent = ret.gsx$lang.$t;
+        }
+
+        function lukSingle() {
+            document.querySelector("#popup").style.display = "none";
+
+            start();
+        }
+
+    </script>
+
+    <footer>
+        <div id="footer1">
+            <h3>Adresse:</h3>
+            <p>Grønnegade 97</p>
+            <p>1234 København K</p>
+        </div>
+        <div id="footer2">
+            <h3>Åbningstider:</h3>
+            <p>Mandag til fredag 10.30 - 22.00 </p>
+            <p>Lørdag 12:00 - 23:00 </p>
+        </div>
+    </footer>
+</body>
+
+</html>
